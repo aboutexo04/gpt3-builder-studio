@@ -63,16 +63,17 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ code, skeleton, filename, langu
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Tab') {
       e.preventDefault();
-      const start = e.currentTarget.selectionStart;
-      const end = e.currentTarget.selectionEnd;
-      const value = e.currentTarget.value;
-      
-      e.currentTarget.value = value.substring(0, start) + '    ' + value.substring(end);
-      e.currentTarget.selectionStart = e.currentTarget.selectionEnd = start + 4;
-      handleCodeChange(e as any);
+      const target = e.currentTarget;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const value = target.value;
+
+      target.value = value.substring(0, start) + '    ' + value.substring(end);
+      target.selectionStart = target.selectionEnd = start + 4;
+      handleCodeChange({ target } as React.ChangeEvent<HTMLTextAreaElement>);
     }
   };
 
