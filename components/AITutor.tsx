@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Bot, Sparkles, Loader2 } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 interface AITutorProps {
   context: string;
@@ -35,25 +35,24 @@ const AITutor: React.FC<AITutorProps> = ({ context, codeContext }) => {
     setLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `
-        You are an expert AI Engineer tutor. 
+        You are an expert AI Engineer tutor.
         Context: The user is learning to build GPT-3 in PyTorch.
         Current Topic: ${context}
-        Current Code: 
+        Current Code:
         ${codeContext}
-        
+
         User Question: ${userMsg}
-        
+
         Answer clearly, concisely, and focus on the technical details of the implementation.
       `;
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt
-      });
-      
-      setMessages(prev => [...prev, { role: 'model', text: response.text || "I couldn't generate a response." }]);
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+
+      setMessages(prev => [...prev, { role: 'model', text: response.text() || "I couldn't generate a response." }]);
     } catch (error) {
       setMessages(prev => [...prev, { role: 'model', text: "Error connecting to AI Tutor. Please check your API key." }]);
       console.error(error);

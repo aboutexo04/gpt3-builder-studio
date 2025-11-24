@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Play, Save, FolderOpen, Trash2, Bot, Loader2, FileText, AlertTriangle } from 'lucide-react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { SimulationConfig } from '../types';
 
 interface SimulationPanelProps {
@@ -40,15 +40,14 @@ const SimulationPanel: React.FC<SimulationPanelProps> = ({ config }) => {
     setOutput('');
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      const genAI = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY);
+      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
       const prompt = `${config.systemPrompt}\n\nInput: ${input}`;
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: prompt
-      });
-      
-      setOutput(response.text || "No response generated.");
+
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+
+      setOutput(response.text() || "No response generated.");
     } catch (error) {
       setOutput("Error: Could not run simulation. Please check API Key.");
       console.error(error);
