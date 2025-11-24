@@ -1,0 +1,5 @@
+{
+  "name": "GPT-3 Builder Studio",
+  "description": "An interactive clone-coding guide to building, instruction-tuning, and classification-tuning a GPT-3 style model from scratch using PyTorch concepts and Gemini for explanations.",
+  "requestFramePermissions": []
+}
