@@ -286,7 +286,7 @@ class GPTConfig:
     description: "Combining Attention and Feed-Forward networks into a repeating block.",
     content: (
       <div className="space-y-4 text-slate-300">
-        <p>A single Transformer Block consists of: LayerNorm -> Attention -> Residual Connection -> LayerNorm -> MLP -> Residual Connection.</p>
+        <p>A single Transformer Block consists of: LayerNorm → Attention → Residual Connection → LayerNorm → MLP → Residual Connection.</p>
       </div>
     ),
     codeSnippets: [
