@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Copy, Terminal, BookOpen, PenTool, RotateCcw, Check, Save, Columns, Layout, Clipboard } from 'lucide-react';
+import { Copy, Terminal, BookOpen, PenTool, RotateCcw, Check, Columns, Layout, Clipboard } from 'lucide-react';
 
 interface CodeViewerProps {
   code: string;       // The solution
@@ -13,7 +13,6 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ code, skeleton, filename, langu
   const [activeTab, setActiveTab] = useState<'reference' | 'workspace'>('workspace');
   const [isSplitView, setIsSplitView] = useState(false);
   const [userCode, setUserCode] = useState<string>('');
-  const [isSaved, setIsSaved] = useState(false);
   const [justCopied, setJustCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -32,10 +31,6 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ code, skeleton, filename, langu
     const newValue = e.target.value;
     setUserCode(newValue);
     localStorage.setItem(`gpt_builder_code_${filename}`, newValue);
-    
-    // Quick save indicator reset
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 1000);
   };
 
   const handleReset = () => {
@@ -198,7 +193,6 @@ const CodeViewer: React.FC<CodeViewerProps> = ({ code, skeleton, filename, langu
           >
             <PenTool size={14} />
             Your Workspace
-            {isSaved && <Save size={12} className="text-emerald-500 animate-pulse ml-1" />}
           </button>
           
           <button
